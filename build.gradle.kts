@@ -40,8 +40,15 @@ tasks {
         }
     }
     jar {
+        finalizedBy(":export")
         manifest {
             attributes["Main-Class"] = "meteor.plugins.external.ExternalPlugin"
         }
     }
+
+}
+
+tasks.register<Copy>("export") {
+    from("./build/libs/${rootProject.name}-$version.jar")
+    into("${System.getProperty("user.home")}/.meteor/externalplugins/")
 }
