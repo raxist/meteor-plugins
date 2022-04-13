@@ -3,10 +3,11 @@ import proguard.gradle.ProGuardTask
 plugins {
     kotlin("jvm") version "1.6.10"
 }
+
 group = "org.example"
 version = "1.0-SNAPSHOT"
 
-val apiRelease by rootProject.extra { "1.1.8" }
+val apiRelease by rootProject.extra { "1.2.3" }
 val clientRelease by rootProject.extra { "1" }
 val pluginClass by rootProject.extra { "meteor.plugins.external.ExternalPlugin" }
 
@@ -22,13 +23,11 @@ buildscript {
 
 repositories {
     mavenLocal()
-    mavenCentral()
     maven { url = uri("https://raw.githubusercontent.com/MeteorLite/hosting/main/repo/") }
+    mavenCentral()
 }
 
 dependencies {
-    implementation(kotlin("stdlib"))
-
     //Required libraries
     compileOnly(group = "meteor", name = "api-rs", version = apiRelease)
     compileOnly(group = "meteor", name = "api", version = apiRelease)
@@ -36,20 +35,24 @@ dependencies {
     compileOnly(group = "meteor", name = "annotations", version = apiRelease)
     compileOnly(group = "meteor", name = "logger", version = apiRelease)
     compileOnly(group = "meteor", name = "client", version = "$apiRelease-$clientRelease")
-    compileOnly(group = "org.rationalityfrontline", name = "kevent", version = "2.1.2")
-    implementation(group = "kext", name = "kext", version = "1.0.0")
+    compileOnly(group = "org.rationalityfrontline", name = "kevent", version = "2.1.4")
 }
 
 tasks {
+    compileJava {
+        sourceCompatibility = JavaVersion.VERSION_17.toString()
+        targetCompatibility = JavaVersion.VERSION_17.toString()
+    }
+
     compileKotlin {
         sourceCompatibility = JavaVersion.VERSION_17.toString()
         targetCompatibility = JavaVersion.VERSION_17.toString()
 
         kotlinOptions {
-            jvmTarget = "11"
+            jvmTarget = "17"
             apiVersion = "1.6"
             languageVersion = "1.6"
-            freeCompilerArgs += "-Xjvm-default=compatibility"
+            freeCompilerArgs = listOf("-Xjvm-default=all")
         }
     }
     jar {

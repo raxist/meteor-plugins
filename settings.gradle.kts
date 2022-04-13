@@ -1,2 +1,2 @@
-rootProject.name = "meteor-example"
+rootProject.name = "meteor-external"
 

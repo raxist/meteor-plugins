@@ -1,16 +1,13 @@
 package meteor.plugins.external
 
 import eventbus.events.*
-import kext.Extension
 import meteor.plugins.Plugin
 import meteor.plugins.PluginDescriptor
 import meteor.plugins.external.overlay.ExternalOverlay
 
-@Extension(name = "meteor-example", version = "1.0.0", provider = "Null")
-@PluginDescriptor(name = "Example", description = "The new shit", enabledByDefault = false)
+@PluginDescriptor(name = "Example", description = "The new shit", enabledByDefault = false, external = true)
 class ExternalPlugin : Plugin() {
     //No dependency injection
-
 
     //No provide
     override var config = configuration<ExternalConfig>()
