@@ -15,7 +15,6 @@ class ExternalPlugin : Plugin() {
     //Overlays are handled automatically
     val overlay = overlay(ExternalOverlay(this))
 
-
     override fun onStart() {}
     override fun onStop() {}
 

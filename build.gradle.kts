@@ -1,14 +1,15 @@
 import proguard.gradle.ProGuardTask
 
 plugins {
+    java
     kotlin("jvm") version "1.6.10"
 }
 
 group = "org.example"
 version = "1.0-SNAPSHOT"
 
-val apiRelease by rootProject.extra { "1.2.3" }
-val clientRelease by rootProject.extra { "1" }
+val apiRelease by rootProject.extra { "1.3.0" }
+val clientRelease by rootProject.extra { "2" }
 val pluginClass by rootProject.extra { "meteor.plugins.external.ExternalPlugin" }
 
 val outputJar by rootProject.extra { "./build/libs/${rootProject.name}-${version}.jar" }
@@ -72,13 +73,6 @@ tasks.register<ProGuardTask>("proguard") {
 }
 
 tasks.register<Copy>("export") {
-    dependsOn(":jar")
-    from(outputJar)
-    into(exportDir)
-    rename("${rootProject.name}-${version}.jar", "${rootProject.name}.jar")
-}
-
-tasks.register<Copy>("exportObfuscated") {
     dependsOn(":proguard")
     from(obfuscatedJar)
     into(exportDir)
