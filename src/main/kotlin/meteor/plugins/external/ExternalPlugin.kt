@@ -9,17 +9,17 @@ import meteor.plugins.external.overlay.ExternalOverlay
 class ExternalPlugin : Plugin() {
     //No dependency injection
 
-    //No provide
-    override var config = configuration<ExternalConfig>()
+    //No provide inline method gets the config for you
+    var config = configuration<ExternalConfig>()
 
     //Overlays are handled automatically
     val overlay = overlay(ExternalOverlay(this))
 
-    override fun onStart() {}
     override fun onStop() {}
 
     //Override, no subscribe
     override fun onGameStateChanged(it: GameStateChanged) {
-        println(it.gamestate.name)
+        println(it.gameState.name)
     }
+
 }

@@ -2,18 +2,16 @@ import proguard.gradle.ProGuardTask
 
 plugins {
     java
-    kotlin("jvm") version "1.6.10"
+    kotlin("jvm") version "1.7.20"
 }
 
 group = "org.example"
 version = "1.0-SNAPSHOT"
 
-val apiRelease by rootProject.extra { "1.3.0" }
-val clientRelease by rootProject.extra { "2" }
+val apiRelease by rootProject.extra { "9.9.9" }
 val pluginClass by rootProject.extra { "meteor.plugins.external.ExternalPlugin" }
 
 val outputJar by rootProject.extra { "./build/libs/${rootProject.name}-${version}.jar" }
-val obfuscatedJar by rootProject.extra { "./build/libs/${rootProject.name}-proguard.jar" }
 val exportDir by rootProject.extra { "${System.getProperty("user.home")}/.meteor/externalplugins/" }
 
 buildscript {
@@ -30,13 +28,10 @@ repositories {
 
 dependencies {
     //Required libraries
-    compileOnly(group = "meteor", name = "api-rs", version = apiRelease)
+    //meteor-client-1.7-r2.jar
+    compileOnly(group = "meteor", name = "client", version = apiRelease)
     compileOnly(group = "meteor", name = "api", version = apiRelease)
-    compileOnly(group = "meteor", name = "http", version = apiRelease)
-    compileOnly(group = "meteor", name = "annotations", version = apiRelease)
-    compileOnly(group = "meteor", name = "logger", version = apiRelease)
-    compileOnly(group = "meteor", name = "client", version = "$apiRelease-$clientRelease")
-    compileOnly(group = "org.rationalityfrontline", name = "kevent", version = "2.1.4")
+    implementation(group ="org.rationalityfrontline" ,name = "kevent", version ="2.1.4")
 }
 
 tasks {
@@ -46,13 +41,10 @@ tasks {
     }
 
     compileKotlin {
-        sourceCompatibility = JavaVersion.VERSION_17.toString()
-        targetCompatibility = JavaVersion.VERSION_17.toString()
-
         kotlinOptions {
             jvmTarget = "17"
-            apiVersion = "1.6"
-            languageVersion = "1.6"
+            apiVersion = "1.7"
+            languageVersion = "1.7"
             freeCompilerArgs = listOf("-Xjvm-default=all")
         }
     }
@@ -64,17 +56,7 @@ tasks {
     }
 }
 
-tasks.register<ProGuardTask>("proguard") {
-    dependsOn(":jar")
-    configuration("proguard.conf")
-    injars(outputJar)
-    outjars(obfuscatedJar)
-    libraryjars(project.configurations.compileClasspath.files)
-}
-
 tasks.register<Copy>("export") {
-    dependsOn(":proguard")
-    from(obfuscatedJar)
+    from(outputJar)
     into(exportDir)
-    rename("${rootProject.name}-proguard.jar", "${rootProject.name}.jar")
 }
