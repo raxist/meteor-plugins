@@ -1,9 +1,11 @@
 package meteor.plugins.external
 
 import eventbus.events.*
+import meteor.Main
 import meteor.plugins.Plugin
 import meteor.plugins.PluginDescriptor
 import meteor.plugins.external.overlay.ExternalOverlay
+import net.runelite.http.api.RuneLiteAPI
 
 @PluginDescriptor(name = "Example", description = "The new shit", enabledByDefault = false, external = true)
 class ExternalPlugin : Plugin() {
@@ -21,5 +23,4 @@ class ExternalPlugin : Plugin() {
     override fun onGameStateChanged(it: GameStateChanged) {
         println(it.gameState.name)
     }
-
 }

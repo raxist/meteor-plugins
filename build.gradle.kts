@@ -2,13 +2,12 @@ import proguard.gradle.ProGuardTask
 
 plugins {
     java
-    kotlin("jvm") version "1.7.20"
+    kotlin("jvm") version "1.8.10"
 }
 
 group = "org.example"
 version = "1.0-SNAPSHOT"
 
-val apiRelease by rootProject.extra { "9.9.9" }
 val pluginClass by rootProject.extra { "meteor.plugins.external.ExternalPlugin" }
 
 val outputJar by rootProject.extra { "./build/libs/${rootProject.name}-${version}.jar" }
@@ -27,11 +26,8 @@ repositories {
 }
 
 dependencies {
-    //Required libraries
-    //meteor-client-1.7-r2.jar
-    compileOnly(group = "meteor", name = "client", version = apiRelease)
-    compileOnly(group = "meteor", name = "api", version = apiRelease)
-    implementation(group ="org.rationalityfrontline" ,name = "kevent", version ="2.1.4")
+    //meteor-client fat jar
+    compileOnly(files("./libs/meteor-shadow.jar"))
 }
 
 tasks {
@@ -44,7 +40,7 @@ tasks {
         kotlinOptions {
             jvmTarget = "17"
             apiVersion = "1.7"
-            languageVersion = "1.7"
+            languageVersion = "1.8"
             freeCompilerArgs = listOf("-Xjvm-default=all")
         }
     }
